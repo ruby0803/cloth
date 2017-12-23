@@ -1,4 +1,4 @@
-!function(){try{document.getElementsByClassName("engine")[0].getElementsByTagName("a")[0].removeAttribute("rel")}catch(b){}if(!document.getElementById("top-1")){var a=document.createElement("section");a.id="top-1";a.className="engine";a.innerHTML='<a href="https://mobirise.info">Mobirise</a> Mobirise v4.0.9';document.body.insertBefore(a,document.body.childNodes[0])}}();
+!function(){try{document.getElementsByClassName("engine")[0].getElementsByTagName("a")[0].removeAttribute("rel")}catch(b){}if(!document.getElementById("top-1")){var a=document.createElement("section");a.id="top-1";a.className="engine";a.innerHTML='<a href="https://mobirise.info">Mobirise</a> Mobirise v4.5.2';document.body.insertBefore(a,document.body.childNodes[0])}}();
 (function($) {
 
     var isBuilder = $('html').hasClass('is-builder');
@@ -463,7 +463,8 @@
                             $(useBody ? 'body' : target.hash).each(function() {
                                 e.preventDefault();
                                 // in css sticky navbar has height 64px
-                                var stickyMenuHeight = $('.mbr-navbar--sticky').length ? 64 : 0;
+                                // var stickyMenuHeight = $('.mbr-navbar--sticky').length ? 64 : 0;
+                                var stickyMenuHeight = $(target).parents().hasClass('navbar-fixed-top') ? 60 : 0;
                                 var goTo = target.hash == '#bottom' ? ($(this).height() - $(window).height()) : ($(this).offset().top - stickyMenuHeight);
                                 // Disable Accordion's and Tab's scroll
                                 if ($(this).hasClass('panel-collapse') || $(this).hasClass('tab-pane')) {
@@ -635,28 +636,6 @@
         }
     });
 
-    $(document).ready(function() {
-        // Counters
-        if ($('.counters').length) {
-            $('.counters').viewportChecker({
-                offset: 200,
-                callbackFunction: function(elem, action) {
-                    $('#' + elem.attr('id') + ' .count').each(function() {
-                        $(this).prop('Counter', 0).animate({
-                            Counter: $(this).text()
-                        }, {
-                            duration: 3000,
-                            easing: 'swing',
-                            step: function(now) {
-                                $(this).text(Math.ceil(now));
-                            }
-                        });
-                    });
-                }
-            });
-        }
-    });
-
     // arrow down
     if (!isBuilder) {
         $('.mbr-arrow').on('click', function(e) {
@@ -769,121 +748,7 @@
         }
     });
 
-    // clients
-    if (isBuilder) {
-        $(document).on('add.cards changeParameter.cards', function(event) {
-            if (!$(event.target).hasClass('clients')) {
-                return;
-            }
-
-            var $target = $(event.target);
-            // Show multiple slides at once
-            var visibleSlides = $target.find('.carousel-inner').attr('data-visible');
-
-            $target.find('.carousel-inner').attr('class', 'carousel-inner slides' + visibleSlides);
-            $target.find('.clonedCol').remove();
-
-            $target.find('.carousel-item .col-md-12').each(function() {
-                if (visibleSlides < 2) {
-                    $(this).attr('class', 'col-md-12');
-                } else if (visibleSlides === '5') {
-                    $(this).attr('class', 'col-md-12 col-lg-15');
-                } else {
-                    $(this).attr('class', 'col-md-12 col-lg-' + 12 / visibleSlides);
-                }
-            });
-
-            $target.find('.carousel-item').each(function() {
-                var itemToClone = $(this);
-
-                for (var i = 1; i < visibleSlides; i++) {
-                    itemToClone = itemToClone.next();
-
-                    // wrap around if at end of item collection
-                    if (!itemToClone.length) {
-                        itemToClone = $(this).siblings(':first');
-                    }
-
-                    var index = itemToClone.index();
-
-                    // grab item, clone, add marker class, add to collection
-                    itemToClone.find('.col-md-12:first').clone()
-                        .addClass('cloneditem-' + i).addClass('clonedCol').attr('data-cloned-index', index)
-                        .appendTo($(this).children().eq(0));
-                }
-            });
-
-            if (event.type === 'add') {
-                // Update all slides
-                $target.on('slide.bs.carousel', function() {
-                    $target.find('.clonedCol').remove();
-                    $target.find('.carousel-item').each(function() {
-                        var itemToClone = $(this);
-
-                        for (var i = 1; i < visibleSlides; i++) {
-                            itemToClone = itemToClone.next();
-
-                            // wrap around if at end of item collection
-                            if (!itemToClone.length) {
-                                itemToClone = $(this).siblings(':first');
-                            }
-
-                            var index = itemToClone.index();
-
-                            // grab item, clone, add marker class, add to collection
-                            itemToClone.find('.col-md-12:first').clone()
-                                .addClass('cloneditem-' + i).addClass('clonedCol').attr('data-cloned-index', index)
-                                .appendTo($(this).children().eq(0));
-                        }
-                    });
-                });
-            }
-        });
-    }
-
     if (!isBuilder) {
-        $(document).on('add.cards', function(event) {
-            if (!$(event.target).hasClass('clients')) {
-                return;
-            }
-
-            var $target = $(event.target);
-            // Show multiple slides at once
-            var visibleSlides = $target.find('.carousel-inner').attr('data-visible');
-
-            if (visibleSlides < 2) {
-                return;
-            }
-
-            $target.find('.carousel-inner').attr('class', 'carousel-inner slides' + visibleSlides);
-
-            $target.find('.carousel-item .col-md-12').each(function() {
-                if (visibleSlides === '5') {
-                    $(this).attr('class', 'col-md-12 col-lg-15');
-                } else {
-                    $(this).attr('class', 'col-md-12 col-lg-' + 12 / visibleSlides);
-                }
-            });
-
-            $target.find('.carousel-item').each(function() {
-                var itemToClone = $(this);
-
-                for (var i = 1; i < visibleSlides; i++) {
-                    itemToClone = itemToClone.next();
-
-                    // wrap around if at end of item collection
-                    if (!itemToClone.length) {
-                        itemToClone = $(this).siblings(':first');
-                    }
-
-                    // grab item, clone, add marker class, add to collection
-                    itemToClone.find('.col-md-12:first').clone()
-                        .addClass('cloneditem-' + i)
-                        .appendTo($(this).children().eq(0));
-                }
-            });
-        });
-
         // open dropdown menu on hover
         if (!$.isMobile()) {
             var $menu = $('section.menu'),
@@ -922,142 +787,96 @@
         }
     }
 
-    // Script for circle progress
-    function initCircleProgress(card) {
-        $('.pie_progress').asPieProgress({
-            namespace: 'asPieProgress',
-            classes: {
-                element: 'pie_progress',
-                number: 'pie_progress__number'
-            },
-            min: 0,
-            max: 100,
-            size: 150,
-            speed: 30,
-            barsize: '8',
-            fillcolor: 'none',
-            easing: 'ease'
-        });
-
-        $(card).find('.pie_progress').each(function() {
-            $(this).asPieProgress('go', $(this).attr('data-goal') + '%');
-        });
+    // Functions from plugins for
+    // compatible with old projects 
+    function setActiveCarouselItem(card){
+       var $target = $(card).find('.carousel-item:first');
+       $target.addClass('active');
     }
-
-    function setCurrentCircleProgress(card, paramName) {
-        var $elem = $(card).find("." + paramName);
-        $elem.asPieProgress('go', $elem.attr('data-goal') + '%');
+    function initTestimonialsCarousel(card){
+        var $target = $(card),
+            $carouselID = $target.attr('ID') +"-carousel"; 
+        $target.find('.carousel').attr('id',$carouselID);
+        $target.find('.carousel-controls a').attr('href','#'+$carouselID);
+        $target.find('.carousel-indicators li').attr('data-target','#'+$carouselID);
+        setActiveCarouselItem($target);  
     }
+    function initClientCarousel(card){
+        var $target = $(card),
+        countElems = $target.find('.carousel-item').length,
+        visibleSlides = $target.find('.carousel-inner').attr('data-visible');
+        if (countElems < visibleSlides){
+            visibleSlides = countElems;
+        }
+        $target.find('.carousel-inner').attr('class', 'carousel-inner slides' + visibleSlides);
+        $target.find('.clonedCol').remove();
 
-    if (isBuilder) {
-        $(document).on('add.cards', function(event) {
-            if ($('.pie_progress').length) {
-                initCircleProgress(event.target);
+        $target.find('.carousel-item .col-md-12').each(function() {
+            if (visibleSlides < 2) {
+                $(this).attr('class', 'col-md-12');
+            } else if (visibleSlides == '5') {
+                $(this).attr('class', 'col-md-12 col-lg-15');
+            } else {
+                $(this).attr('class', 'col-md-12 col-lg-' + 12 / visibleSlides);
             }
-        }).on('delete.cards', function(event) {
-            $(event.target).find('.pie_progress').asPieProgress('destroy');
-        }).on('changeParameter.cards', function(event, paramName) {
-            if (paramName.indexOf('progress') == 0) {
-                if ($('.pie_progress').length) {
-                    setCurrentCircleProgress(event.target, paramName);
+        });
+
+        $target.find('.carousel-item').each(function() {
+            var itemToClone = $(this);
+            for (var i = 1; i < visibleSlides; i++) {
+                itemToClone = itemToClone.next();
+                if (!itemToClone.length) {
+                    itemToClone = $(this).siblings(':first');
                 }
+                var index = itemToClone.index();
+                itemToClone.find('.col-md-12:first').clone().addClass('cloneditem-' + i).addClass('clonedCol').attr('data-cloned-index', index).appendTo($(this).children().eq(0));
             }
         });
-    } else {
-        if ($('.pie_progress').length) {
-            initCircleProgress(document.body);
+    }
+    function updateClientCarousel(card){
+        var $target = $(card),
+            countElems = $target.find('.carousel-item').length,
+            visibleSlides = $target.find('.carousel-inner').attr('data-visible');
+        if (countElems < visibleSlides){
+            visibleSlides = countElems;
+        }
+        $target.find('.clonedCol').remove();
+        $target.find('.carousel-item').each(function() {
+            var itemToClone = $(this);
+            for (var i = 1; i < visibleSlides; i++) {
+                itemToClone = itemToClone.next();
+                if (!itemToClone.length) {
+                    itemToClone = $(this).siblings(':first');
+                }
+                var index = itemToClone.index();
+                itemToClone.find('.col-md-12:first').clone().addClass('cloneditem-' + i).addClass('clonedCol').attr('data-cloned-index', index).appendTo($(this).children().eq(0));
+            }
+        });
+    }
+    function clickHandler(e){
+        e.stopPropagation();
+        e.preventDefault();
+
+        var $target = $(e.target);
+        var curItem;
+        var curIndex;
+
+        if ($target.closest('.clonedCol').length) {
+            curItem = $target.closest('.clonedCol');
+            curIndex = curItem.attr('data-cloned-index');
+        } else {
+            curItem = $target.closest('.carousel-item');
+            curIndex = curItem.index();
+        }
+        var item = $($target.closest('.carousel-inner').find('.carousel-item')[curIndex]).find('img')[0];
+                        
+        if ($target.parents('.clonedCol').length > 0) {
+            item.click();
         }
     }
-
-    //Script for countdown
-    function initCountdown() {
-        $(".countdown:not(.countdown-inited)").each(function() {
-            $(this).addClass('countdown-inited').countdown($(this).attr('data-due-date'), function(event) {
-                $(this).html(
-                    event.strftime([
-                        '<div class="row">',
-                        '<div class="col-xs-12 col-sm-6 col-md-3">',
-                        '<span class="number-wrap">',
-                        '<span class="number display-2">%D</span>',
-                        '<span mbr-text class="period display-7">Days</span>',
-                        '<span class="dot">:</span>',
-                        '</span>',
-                        '</div>',
-                        '<div class="col-xs-12 col-sm-6 col-md-3">',
-                        '<span class="number-wrap">',
-                        '<span class="number display-2">%H</span>',
-                        '<span mbr-text class="period display-7">Hours</span>',
-                        '<span class="dot">:</span>',
-                        '</span>',
-                        '</div>',
-                        '<div class="col-xs-12 col-sm-6 col-md-3">',
-                        '<span class="number-wrap">',
-                        '<span class="number display-2">%M</span>',
-                        '<span mbr-text class="period display-7">Minutes</span>',
-                        '<span class="dot">:</span>',
-                        '</span>',
-                        '</div>',
-                        '<div class="col-xs-12 col-sm-6 col-md-3">',
-                        '<span class="number-wrap">',
-                        '<span class="number display-2">%S</span>',
-                        '<span mbr-text class="period display-7">Seconds</span>',
-                        '</span>',
-                        '</div>',
-                        '</div>'
-                    ].join(''))
-                );
-            });
-        });
-
-        $(".countdown:not(.countdown-inited)").each(function() {
-            $(this).countdown($(this).attr('data-due-date'), function(event) {
-                $(this).text(
-                    event.strftime('%D days %H:%M:%S')
-                );
-            });
-        });
+    $.fn.outerFind = function(selector) {
+        return this.find(selector).addBack(selector);
     };
-
-    function changeCountdown(card, value) {
-        var $reg = /\d\d\d\d\/\d\d\/\d\d/g,
-            $target = $(card).find('.countdown');
-        if (value.search($reg) > -1) {
-            $target.removeClass('countdown-inited');
-            initCountdown();
-        }
-    }
-
-    if (isBuilder) {
-        $(document).on('add.cards', function(event) {
-            if ($('.countdown').length != 0) {
-                initCountdown();
-            }
-        }).on('changeParameter.cards', function(event, paramName, value) {
-            if (paramName === 'countdown') {
-                changeCountdown(event.target, value);
-            }
-        });;
-    } else {
-        if ($('.countdown').length != 0) {
-            initCountdown();
-        };
-    }
-
-    // script for flip images
-    function bendBottomCorner() {
-        $(".flip-card:not(.builderCard)").each(function() {
-            $(this).addClass('builderCard');
-        });
-    }
-    if (isBuilder) {
-        $(document).on('add.cards', function() {
-            if ($('.flip-card').length != 0) {
-                bendBottomCorner();
-            }
-        });
-    }
-
-    // tabs
     function initTabs(target) {
         if ($(target).find('.nav-tabs').length !== 0) {
             $(target).outerFind('section[id^="tabs"]').each(function() {
@@ -1080,49 +899,108 @@
             });
         }
     }
-
-    if (isBuilder) {
-        $(document).on('add.cards', function(e) {
-            initTabs(e.target);
-        });
-    } else {
-        initTabs(document.body);
+    function clickPrev(event){
+        event.stopPropagation();
+        event.preventDefault();
     }
-
-
-    // Testimonials Slider
-    function setActiveCarouselItem(card){
-       var $target = $(card).find('.carousel-item:first');
-       $target.addClass('active');
-    } 
-
-    function initTestimonialsCarousel(card){
-        var $target = $(card),
-            $carouselID = $target.attr('ID') +"-carousel"; 
-
-        $target.find('.carousel').attr('id',$carouselID);
-        $target.find('.carousel-controls a').attr('href','#'+$carouselID);
-        setActiveCarouselItem($target);  
-    }
-    
-    if (isBuilder) {
-        $(document).on('add.cards', function(event) {
-            if ($('.testimonials-slider').length != 0) {
-                initTestimonialsCarousel(event.target);
-            }
-        }).on('changeParameter.cards', function(event, paramName, value) {
-            if (paramName === 'testimonialsSlides') {
-                if ($(event.target).find('.carousel-item.active').length==0) {
-                    setActiveCarouselItem(event.target);
+    if(!isBuilder){
+        if(typeof window.initClientPlugin ==='undefined'){
+            if($(document.body).find('.clients').length!=0){
+                window.initClientPlugin = true;
+                $(document.body).find('.clients').each(function(index, el) {
+                    if(!$(this).attr('data-isinit')){
+                        initTestimonialsCarousel($(this));
+                        initClientCarousel($(this));
+                    }  
+                });  
+            } 
+        }
+        if(typeof window.initPopupBtnPlugin === 'undefined'){
+            if($(document.body).find('section.popup-btn-cards').length!=0){
+                window.initPopupBtnPlugin = true;
+                $('section.popup-btn-cards .card-wrapper').each(function(index, el) {
+                    $(this).addClass('popup-btn');
+                }); 
+            }      
+        }
+        if(typeof window.initTestimonialsPlugin === 'undefined'){
+            if($(document.body).find('.testimonials-slider').length!=0){
+                window.initTestimonialsPlugin = true;
+                $('.testimonials-slider').each(function(){
+                    initTestimonialsCarousel(this);
+                }); 
+            }      
+        }
+        if (typeof window.initSwitchArrowPlugin === 'undefined'){
+            window.initSwitchArrowPlugin = true;
+            $(document).ready(function() {
+                if ($('.accordionStyles').length!=0) {
+                        $('.accordionStyles .card-header a[role="button"]').each(function(){
+                            if(!$(this).hasClass('collapsed')){
+                                $(this).addClass('collapsed');
+                            }
+                        });
+                    }
+            });
+            $('.accordionStyles .card-header a[role="button"]').click(function(){
+                var $id = $(this).closest('.accordionStyles').attr('id'),
+                    $iscollapsing = $(this).closest('.card').find('.panel-collapse');
+                if (!$iscollapsing.hasClass('collapsing')) {
+                    if ($id.indexOf('toggle') != -1){
+                        if ($(this).hasClass('collapsed')) {
+                            $(this).find('span.sign').removeClass('mbri-arrow-down').addClass('mbri-arrow-up'); 
+                        }
+                        else{
+                            $(this).find('span.sign').removeClass('mbri-arrow-up').addClass('mbri-arrow-down'); 
+                        }
+                    }
+                    else if ($id.indexOf('accordion')!=-1) {
+                        var $accordion =  $(this).closest('.accordionStyles ');
+                    
+                        $accordion.children('.card').each(function() {
+                            $(this).find('span.sign').removeClass('mbri-arrow-up').addClass('mbri-arrow-down'); 
+                        });
+                        if ($(this).hasClass('collapsed')) {
+                            $(this).find('span.sign').removeClass('mbri-arrow-down').addClass('mbri-arrow-up'); 
+                        }
+                    }
                 }
-            }
-        });;
-    } else{
-        if ($('.testimonials-slider').length != 0) {
-            $('.testimonials-slider').each(function(){
-                initTestimonialsCarousel(this);
+            });
+        }
+        if(typeof window.initTabsPlugin === 'undefined'){
+            window.initTabsPlugin = true;
+            initTabs(document.body);
+        }
+        
+        // Fix for slider bug
+        if($('.mbr-slider.carousel').length!=0){
+            $('.mbr-slider.carousel').each(function(){
+                var $slider = $(this),
+                    controls = $slider.find('.carousel-control'),
+                    indicators = $slider.find('carousel-indicators li');
+
+                $slider.on('slide.bs.carousel', function () {
+                    controls.bind('click',function(event){
+                        clickPrev(event);
+                    });
+                    indicators.bind('click',function(event){
+                        clickPrev(event);
+                    })
+                    $slider.carousel({
+                        keyboard:false
+                    });
+                }).on('slid.bs.carousel',function(){
+                    controls.unbind('click');
+                    indicators.unbind('click');
+                    $slider.carousel({
+                        keyboard:true
+                    });
+                    if($slider.find('.carousel-item.active').length>1){
+                        $slider.find('.carousel-item.active').eq(1).removeClass('active');
+                        $slider.find('.carousel-control li.active').eq(1).removeClass('active');
+                    }
+                });
             });
         }
     }
-
 })(jQuery);
